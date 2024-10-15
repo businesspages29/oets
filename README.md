@@ -45,52 +45,45 @@ Setup Migrations with seeder
 
 # Login Credentials
 
+
 ```bash
-  email :organizer@organizer.com
+  email: admin@admin.com
   passowrd: password
 ```
 
-# Database Schema
+```bash
+  email: organizer@organizer.com
+  passowrd: password
+```
 
-users
-- name
-- email
-- password
-
-events
-- organizer_id (R: users)
-- title
-- description
-- date
-- location
-- ticket_availability
+```bash
+  email: attendee@attendee.com
+  passowrd: password
+```
 
 
-tickets
-- event_id
-- type -> types  enum
-- price
-- quantity
+# Debugging 
 
-attendees
-- user_id
-- event_id
+```bash
+http://127.0.0.1:8000/telescope/requests
+```
 
+## Lessons Learned (Blog)
 
-Explain In Blogs
 - https://raviyatechnical.medium.com/laravel-11-efficient-enum-creation-command-database-migrations-and-seeding-strategies-b8690eb4ca09
-
+- https://raviyatechnical.medium.com/laravel-11-with-yajra-datatables-export-features-for-csv-excel-pdf-and-print-3bc28bae4af6
 
 Refer Docs
-- https://yajrabox.com/docs/laravel-datatables/11.0
+- https://laravel.com/docs/11.x/authentication#authenticating-users
+- https://yajrabox.com/docs/laravel-datatables/11.0 
+
 
 
 ## Tech Stack
 
-**Client:** React, Redux, TailwindCSS
+**Client:** Boostrap 5, Datatables, Bootstrap Icons
 
 **Server:** Laravel 11
-
 
 ## Authors
 

@@ -17,9 +17,21 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'role' => Role::ADMIN->value,
+        ]);
+
+        User::factory()->create([
             'name' => 'organizer',
             'email' => 'organizer@organizer.com',
             'role' => Role::ORGANIZER->value,
+        ]);
+
+        User::factory()->create([
+            'name' => 'attendee',
+            'email' => 'attendee@attendee.com',
+            'role' => Role::ATTENDEE->value,
         ]);
 
         $this->call(EventSeeder::class);

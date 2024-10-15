@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,5 +46,26 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relationships
+    public function tickets()
+    {
+        return $this->hasManyThrough(Ticket::class, Attendee::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === Role::ADMIN->value;
+    }
+
+    public function isOrganizer(): bool
+    {
+        return $this->role === Role::ORGANIZER->value;
+    }
+
+    public function isAttendee(): bool
+    {
+        return $this->role === Role::ATTENDEE->value;
     }
 }

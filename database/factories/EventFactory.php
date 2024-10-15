@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Enums\Role;
+use App\Models\Attendee;
 use App\Models\Event;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,12 +26,27 @@ class EventFactory extends Factory
         $organizer = User::factory()->create(['role' => Role::ORGANIZER->value]);
 
         return [
-            'title' => $this->faker->sentence,
+            'title' => $this->faker->sentence(3),
+            'slug' => $this->faker->slug,
             'description' => $this->faker->paragraph,
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 month'),
             'location' => $this->faker->address,
-            'ticket_availability' => $this->faker->numberBetween(50, 200),
             'organizer_id' => $organizer->id,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Event $event) {
+            $tickets = Ticket::factory()->count(3)->create([
+                'event_id' => $event->id,
+            ]);
+
+            $tickets->each(function ($ticket) {
+                Attendee::factory()->count(5)->create([
+                    'ticket_id' => $ticket->id,
+                ]);
+            });
+        });
     }
 }
