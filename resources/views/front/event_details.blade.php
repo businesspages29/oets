@@ -21,7 +21,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="date" class="form-label fw-bold">Date:</label>
-                            <p id="date">{{ $event->date->format('F j, Y H:i') }}</p>
+                            <p id="date">{{ $event->date->format('F j, Y') }}</p>
                         </div>
                         <div class="mb-3">
                             <label for="location" class="form-label fw-bold">Location:</label>
@@ -60,7 +60,7 @@
                                     <td>{{ $ticket->availableTickets() }}</td>
                                     <td>
                                         @if ($ticket->availableTickets() > 0)
-                                            <a href="{{ route('front.joinDetails', ['id' => $ticket->id]) }}"
+                                            <a href="{{ route('front.joinDetails', ['id' => encryptId($ticket->id)]) }}"
                                                 class="btn btn-primary btn-sm">
                                                 Join
                                             </a>

@@ -21,9 +21,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::name('front.')->controller(FrontController::class)->group(function () {
     Route::get('/', 'home')->name('home');
     Route::get('event/join-details/{id}', 'joinDetails')->name('joinDetails')->middleware('auth');
-    Route::get('event/join/{id}', 'join')->name('join')->middleware('auth');
+    Route::post('event/join/{id}', 'join')->name('join')->middleware('auth');
     Route::get('event/{slug}', 'eventDetails')->name('eventDetails');
-
 });
 
 Route::prefix('users')->name('users.')->controller(UserController::class)->group(function () {
@@ -33,4 +32,8 @@ Route::prefix('users')->name('users.')->controller(UserController::class)->group
 Route::prefix('events')->name('events.')->controller(EventController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('{event}', 'show')->name('show');
+    Route::post('save', 'save')->name('save');
+    Route::post('saveTicket', 'save_ticket')->name('saveTicket');
+    Route::delete('delete/{id}', 'delete')->name('delete');
+    Route::delete('deleteTicket/{id}', 'delete_ticket')->name('deleteTicket');
 });

@@ -11,15 +11,30 @@ class FrontController extends Controller
 {
     public function home(Request $request)
     {
-        $currentPage = $request->input('page', 1);
-        $cacheKey = 'events_page_'.$currentPage;
-        $cacheDuration = now()->addHour(24);
+        // $currentPage = $request->input('page', 1);
+        // $cacheKey = 'events_page_'.$currentPage;
+        // $cacheDuration = now()->addHour(24);
 
-        $events = cache()->remember($cacheKey, $cacheDuration, function () {
-            Log::info('Fetching events from the database for the home page.');
+        // $events = cache()->remember($cacheKey, $cacheDuration, function () {
+        //     Log::info('Fetching events from the database for the home page.');
+        //     return Event::paginate(12);
+        // });
+        $currentDate = now();
 
-            return Event::paginate(12);
-        });
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+        $events = Event::query();
+
+        if ($request->filled('search')) {
+            $events->search($request->search);
+        }
+
+        if ($request->filled('date')) {
+            $events->where('date', '=', $request->date);
+        }
+
+        $events = $events->where('date', '>=', $currentDate)->paginate(12);
 
         return view('front.home', compact('events'));
     }
@@ -42,7 +57,11 @@ class FrontController extends Controller
 
     public function joinDetails($id)
     {
-        $ticket = Ticket::with('event')->withCount('attendees')->findOrFail($id);
+        if (! auth()->user()->isAttendee()) {
+            return abort(403);
+        }
+        $decryptId = decryptId($id);
+        $ticket = Ticket::with('event')->withCount('attendees')->findOrFail($decryptId);
 
         if (! ($ticket->availableTickets() > 0)) {
             return redirect()->back()->with('error', 'No more tickets available!');
@@ -51,20 +70,33 @@ class FrontController extends Controller
         return view('front.join_details', compact('ticket'));
     }
 
-    public function join(Request $request)
+    public function join(Request $request, $id)
     {
-        dd($request->all());
+        if (! auth()->user()->isAttendee()) {
+            return abort(403);
+        }
+        $request->validate([
+            'quantity' => 'required|numeric|min:1',
+            'card_number' => 'required|numeric|digits:16|in:4242424242424242,4000000000000341',
+        ]);
 
-        $ticket = Ticket::withCount('attendees')->findOrFail($id);
+        if ($request->card_number == '4000000000000341') {
+            return redirect()->back()->with('error', 'Your card was declined!');
+        }
+
+        $decryptId = decryptId($id);
+        $ticket = Ticket::withCount('attendees')->findOrFail($decryptId);
 
         if (! ($ticket->availableTickets() > 0)) {
             return redirect()->back()->with('error', 'No more tickets available!');
         }
 
-        $ticket->attendees()->create([
-            'user_id' => auth()->id(),
-            'ticket_id' => $ticket->id,
-        ]);
+        foreach (range(1, $request->quantity) as $i) {
+            $ticket->attendees()->create([
+                'user_id' => auth()->id(),
+                'ticket_id' => $ticket->id,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'You have successfully joined the event!');
     }

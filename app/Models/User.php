@@ -49,6 +49,11 @@ class User extends Authenticatable
     }
 
     // Relationships
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'organizer_id');
+    }
+
     public function tickets()
     {
         return $this->hasManyThrough(Ticket::class, Attendee::class);

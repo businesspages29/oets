@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+        $this->loadHelpers();
     }
 
     /**
@@ -24,5 +25,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+    }
+
+    public function loadHelpers()
+    {
+        foreach (glob(app_path().'/Helpers/*.php') as $filename) {
+            require_once $filename;
+        }
     }
 }

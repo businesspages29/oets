@@ -16,7 +16,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="date" class="form-label fw-bold">Date:</label>
-                            <p id="date">{{ $ticket->event->date->format('F j, Y H:i') }}</p>
+                            <p id="date">{{ $ticket->event->date->format('F j, Y') }}</p>
                         </div>
                         <div class="mb-3">
                             <label for="location" class="form-label fw-bold">Location:</label>
@@ -38,11 +38,9 @@
                         </div>
                     </div>
                 </div>
-                <form action="{{ route('front.join', $ticket->id) }}" method="POST">
+                <form action="{{ route('front.join', encryptId($ticket->id)) }}" method="POST">
                     @csrf
-
                     <div class="row">
-
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="quantity" class="form-label fw-bold">Quantity:</label>
@@ -52,17 +50,25 @@
                             <div class="mb-3">
                                 <label for="card_number" class="form-label fw-bold">Card Number:</label>
                                 <input type="number" name="card_number" id="card_number" class="form-control">
+                                <div class="form-text">
+                                    success: 4242424242424242<br>
+                                    fail: 4000000000000341
+                                </div>
                             </div>
-
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="expires" class="form-label fw-bold">Expires:</label>
-                                <input name="expires" id="expires" class="form-control">
+                                <input type="text" name="expires" id="expires" class="form-control" placeholder="MM/YY"
+                                    maxlength="5" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}">
+                                <div class="form-text">Format: MM/YY (e.g., 09/24)</div>
                             </div>
                             <div class="mb-3">
                                 <label for="cvv" class="form-label fw-bold">CVV:</label>
-                                <input type="number" name="cvv" id="cvv" class="form-control">
+                                <input type="text" name="cvv" id="cvv" class="form-control"
+                                    placeholder="Enter 3-digit CVV" required maxlength="3" pattern="^\d{3}$"
+                                    title="Please enter exactly 3 digits">
+                                <div class="form-text">3 digits on the back of the card</div>
                             </div>
                         </div>
                     </div>

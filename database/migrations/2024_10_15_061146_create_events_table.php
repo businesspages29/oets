@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('location');
             $table->enum('status', array_column(EventStatus::cases(), 'value'))->default(EventStatus::DRAFT->value);
             $table->timestamps();

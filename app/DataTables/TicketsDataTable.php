@@ -20,7 +20,10 @@ class TicketsDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'events.tickets.action')
+            // ->addColumn('action', 'events.tickets.action')
+            ->addColumn('action', function ($row) {
+                return view('events.tickets.action', ['row' => $row]);
+            })
             ->setRowId('id');
     }
 
@@ -30,10 +33,10 @@ class TicketsDataTable extends DataTable
     public function query(Ticket $model): QueryBuilder
     {
         if ($this->event_id) {
-            return $model->newQuery()->eventId($this->event_id);
+            return $model->newQuery()->eventId($this->event_id)->withCount('attendees');
         }
 
-        return $model->newQuery();
+        return $model->newQuery()->withCount('attendees');
     }
 
     /**
@@ -67,6 +70,8 @@ class TicketsDataTable extends DataTable
             Column::make('type'),
             Column::make('price'),
             Column::make('quantity'),
+            Column::make('attendees_count')
+                ->title('Sold'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

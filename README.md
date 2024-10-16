@@ -11,7 +11,7 @@ management, and payment integration.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/businesspages29/oets
 ```
 
 Go to the project directory
@@ -34,7 +34,7 @@ Install dependencies
 Start the server
 
 ```bash
-  npm run start
+  npm build
 ```
 
 Setup Migrations with seeder
@@ -72,6 +72,7 @@ http://127.0.0.1:8000/telescope/requests
 
 - https://raviyatechnical.medium.com/laravel-11-efficient-enum-creation-command-database-migrations-and-seeding-strategies-b8690eb4ca09
 - https://raviyatechnical.medium.com/laravel-11-with-yajra-datatables-export-features-for-csv-excel-pdf-and-print-3bc28bae4af6
+- https://raviyatechnical.medium.com/how-to-install-jquery-in-laravel-11-vite-66a175bfc88d
 
 Refer Docs
 - https://laravel.com/docs/11.x/authentication#authenticating-users
@@ -83,7 +84,7 @@ Refer Docs
 
 **Client:** Boostrap 5, Datatables, Bootstrap Icons
 
-**Server:** Laravel 11
+**Server:** Laravel 11, Yajra Datatables
 
 ## Authors
 
