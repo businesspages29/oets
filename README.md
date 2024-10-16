@@ -43,6 +43,12 @@ Setup Migrations with seeder
   php artisan migrate --seed
 ```
 
+Queues Running for Mail testing 
+
+```bash
+  php artisan queue:work
+```
+
 # Login Credentials
 
 

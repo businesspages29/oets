@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Notifications\TicketConfirmationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -97,6 +98,8 @@ class FrontController extends Controller
                 'ticket_id' => $ticket->id,
             ]);
         }
+
+        auth()->user()->notify(new TicketConfirmationNotification($ticket));
 
         return redirect()->back()->with('success', 'You have successfully joined the event!');
     }
